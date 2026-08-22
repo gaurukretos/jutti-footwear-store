@@ -13,8 +13,12 @@ environ.Env.read_env(BASE_DIR / ".env")
 
 SECRET_KEY = env("SECRET_KEY", default="dev-secret-key-change-in-production")
 DEBUG = env("DEBUG")
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
-
+# ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'jutti-footwear-store.onrender.com',
+]
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
