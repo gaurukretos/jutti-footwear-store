@@ -1,0 +1,19 @@
+# Portable PostgreSQL data (optional local setup)
+.postgres/
+
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+.env
+.venv/
+venv/
+env/
+
+.idea/
+.vscode/
+
+staticfiles/
+media/
+
+*.log

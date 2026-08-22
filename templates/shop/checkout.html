@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="container" style="padding:2rem 0;max-width:800px;">
+  <h1 style="color:var(--accent-dark);margin-bottom:0.5rem;">Checkout</h1>
+  <p style="color:var(--muted);margin-bottom:2rem;">
+    {{ cart_data.mode|title }} order · {{ cart_data.items|length }} item(s) · Total: <strong>₹{{ cart_data.subtotal }}</strong>
+  </p>
+
+  <form method="post" class="inquiry-form">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group">{{ form.customer_name.label_tag }}{{ form.customer_name }}</div>
+      <div class="form-group">{{ form.customer_phone.label_tag }}{{ form.customer_phone }}</div>
+    </div>
+    <div class="form-group">{{ form.customer_email.label_tag }}{{ form.customer_email }}</div>
+
+    {% if cart_data.mode == 'wholesale' %}
+    <div class="form-row">
+      <div class="form-group">{{ form.company_name.label_tag }}{{ form.company_name }}</div>
+      <div class="form-group">{{ form.gst_number.label_tag }}{{ form.gst_number }}</div>
+    </div>
+    {% endif %}
+
+    <div class="form-group">{{ form.address.label_tag }}{{ form.address }}</div>
+    <div class="form-row">
+      <div class="form-group">{{ form.city.label_tag }}{{ form.city }}</div>
+      <div class="form-group">{{ form.state.label_tag }}{{ form.state }}</div>
+    </div>
+    <div class="form-group">{{ form.pincode.label_tag }}{{ form.pincode }}</div>
+    <div class="form-group">{{ form.notes.label_tag }}{{ form.notes }}</div>
+
+    <button type="submit" class="btn btn-primary" style="width:100%;margin-top:0.5rem;">
+      Place {{ cart_data.mode|title }} Order — ₹{{ cart_data.subtotal }}
+    </button>
+  </form>
+</div>
+{% endblock %}

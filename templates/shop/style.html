@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}{{ style.name }}{% endblock %}
+
+{% block content %}
+<div class="container" style="padding:2rem 0;">
+  <h1 style="color:var(--accent-dark);">{{ style.name }}</h1>
+  <p style="color:var(--muted);margin:0.5rem 0 2rem;">{{ style.description }} · Crafted in {{ style.origin }}</p>
+
+  {% if products %}
+  <div class="product-grid">
+    {% for product in products %}
+    {% include "shop/partials/product_card.html" with product=product %}
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h3>No products found for this style</h3>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Shop All Products{% endblock %}
+
+{% block content %}
+<div class="container shop-layout">
+  <aside class="filters">
+    <h3>Category</h3>
+    <ul class="filter-list">
+      <li><a href="{% url 'shop:product_list' %}" class="{% if not active_gender %}active{% endif %}">All</a></li>
+      {% for cat in categories %}
+      <li><a href="?gender={{ cat.slug }}" class="{% if active_gender == cat.slug %}active{% endif %}">{{ cat.icon }} {{ cat.name }}</a></li>
+      {% endfor %}
+    </ul>
+    <h3>Style</h3>
+    <ul class="filter-list">
+      <li><a href="{% url 'shop:product_list' %}{% if active_gender %}?gender={{ active_gender }}{% endif %}" class="{% if not active_style %}active{% endif %}">All Styles</a></li>
+      {% for style in styles %}
+      <li><a href="?{% if active_gender %}gender={{ active_gender }}&{% endif %}style={{ style.slug }}" class="{% if active_style == style.slug %}active{% endif %}">{{ style.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </aside>
+
+  <div>
+    <h1 style="color:var(--accent-dark);margin-bottom:1rem;">All Footwear</h1>
+    <form class="search-bar" method="get">
+      {% if active_gender %}<input type="hidden" name="gender" value="{{ active_gender }}">{% endif %}
+      {% if active_style %}<input type="hidden" name="style" value="{{ active_style }}">{% endif %}
+      <input type="text" name="q" value="{{ search_query }}" placeholder="Search juttis, mojaris...">
+      <button type="submit" class="btn btn-primary btn-sm">Search</button>
+    </form>
+
+    {% if shop_mode == 'wholesale' %}
+    <div class="wholesale-note" style="margin-bottom:1.5rem;">
+      🏷️ <strong>Wholesale mode active</strong> — Switch cart to wholesale for bulk pricing. Minimum quantities apply per product.
+    </div>
+    {% endif %}
+
+    {% if products %}
+    <div class="product-grid">
+      {% for product in products %}
+      {% include "shop/partials/product_card.html" with product=product %}
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <h3>No products found</h3>
+      <p>Try a different filter or search term.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

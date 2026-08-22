@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <video class="hero-video-bg" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1543163521-1bf539c55dd1?w=1600&h=900&fit=crop">
+    <source src="https://videos.pexels.com/video-files/5752729/5752729-uhd_2560_1440_25fps.mp4" type="video/mp4">
+    <source src="https://videos.pexels.com/video-files/7678712/7678712-hd_1920_1080_25fps.mp4" type="video/mp4">
+  </video>
+  <div class="hero-overlay"></div>
+  <div class="container hero-inner">
+    <div class="hero-content">
+      <span class="hero-badge">✦ Handcrafted in Rajasthan</span>
+      <h1>Where Tradition Meets <em>Every Step</em></h1>
+      <p>Dabi Jutti House — premium Rajasthani juttis, mojaris &amp; ethnic footwear for men, women &amp; kids. Retail ya bulk wholesale, sab ek jagah.</p>
+      <div class="hero-actions">
+        <a href="{% url 'shop:product_list' %}" class="btn btn-primary btn-lg">Explore Collection</a>
+        <a href="{% url 'shop:wholesale' %}" class="btn btn-glass btn-lg">Wholesale Inquiry</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card">
+        <strong>23+</strong>
+        <span>Unique Designs</span>
+      </div>
+      <div class="stat-card">
+        <strong>8</strong>
+        <span>Heritage Styles</span>
+      </div>
+      <div class="stat-card">
+        <strong>100%</strong>
+        <span>Handcrafted</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features-strip">
+  <div class="container features-grid">
+    <div class="feature-item">
+      <span class="feature-icon">🧵</span>
+      <div>
+        <strong>Handmade Quality</strong>
+        <p>Artisan-crafted with traditional techniques</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <span class="feature-icon">📦</span>
+      <div>
+        <strong>Pan-India Shipping</strong>
+        <p>Safe delivery across all states</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <span class="feature-icon">🏷️</span>
+      <div>
+        <strong>Wholesale Pricing</strong>
+        <p>Bulk orders from 10 pairs onwards</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <span class="feature-icon">🪔</span>
+      <div>
+        <strong>Authentic Designs</strong>
+        <p>Real Rajasthani juttis &amp; mojaris</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Collections</span>
+      <h2>Shop by Category</h2>
+      <p>Har family member ke liye perfect pair</p>
+    </div>
+    <div class="category-grid">
+      {% for cat in categories %}
+      <a href="{% url 'shop:category' cat.slug %}" class="category-card">
+        <div class="category-icon-wrap">{{ cat.icon }}</div>
+        <h3>{{ cat.name }}</h3>
+        <p>{{ cat.description }}</p>
+        <span class="category-arrow">Shop now →</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section-light">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Heritage</span>
+      <h2>Traditional Styles</h2>
+      <p>Explore our signature footwear collections</p>
+    </div>
+    <div class="style-tags centered">
+      {% for style in styles %}
+      <a href="{% url 'shop:style' style.slug %}" class="style-tag">{{ style.name }} · {{ style.origin }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Bestsellers</span>
+      <h2>Featured Products</h2>
+      <p>Is season ke sabse popular juttis &amp; footwear</p>
+    </div>
+    <div class="product-grid">
+      {% for product in featured_products %}
+      {% include "shop/partials/product_card.html" with product=product %}
+      {% endfor %}
+    </div>
+    <div class="section-cta">
+      <a href="{% url 'shop:product_list' %}" class="btn btn-secondary btn-lg">View All Products</a>
+    </div>
+  </div>
+</section>
+
+<section class="cta-banner">
+  <div class="container cta-inner">
+    <div>
+      <span class="section-label">Business</span>
+      <h2>Wholesale &amp; Bulk Orders</h2>
+      <p>Retailer, boutique owner ya event planner? 10 pairs se shuru — special wholesale rates aur GST invoice.</p>
+    </div>
+    <a href="{% url 'shop:wholesale' %}" class="btn btn-primary btn-lg">Get Wholesale Pricing</a>
+  </div>
+</section>
+{% endblock %}

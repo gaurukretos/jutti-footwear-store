@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Wholesale & Bulk Orders{% endblock %}
+
+{% block content %}
+<section class="wholesale-hero">
+  <div class="container">
+    <h1 style="font-size:2.5rem;margin-bottom:0.75rem;">Wholesale &amp; Bulk Orders</h1>
+    <p style="opacity:0.9;max-width:600px;margin:0 auto;">Partner with Dabi Jutti House for bulk footwear supply. Special pricing for retailers, boutiques, wedding planners &amp; event organizers across India.</p>
+  </div>
+</section>
+
+<div class="container wholesale-grid">
+  <div>
+    <h2 style="color:var(--accent-dark);margin-bottom:1rem;">Why Partner With Us?</h2>
+    <ul class="benefit-list">
+      <li>Wholesale prices starting from 10 pairs per design</li>
+      <li>Rajasthani Juttis, Mojaris, Kolhapuri &amp; Wedding collections</li>
+      <li>Men, Women &amp; Kids — full range available</li>
+      <li>GST invoice &amp; PAN billing for businesses</li>
+      <li>Custom embroidery &amp; bulk branding on request</li>
+      <li>Pan-India shipping via courier partners</li>
+      <li>Dedicated account manager for orders 100+ pairs</li>
+    </ul>
+
+    <h3 style="color:var(--accent-dark);margin:2rem 0 1rem;">Wholesale Price List (Sample)</h3>
+    <table class="cart-table">
+      <thead>
+        <tr><th>Product</th><th>Retail</th><th>Wholesale</th><th>Min Qty</th></tr>
+      </thead>
+      <tbody>
+        {% for product in products|slice:":8" %}
+        <tr>
+          <td>{{ product.name|truncatechars:35 }}</td>
+          <td>₹{{ product.retail_price }}</td>
+          <td><strong>₹{{ product.wholesale_price }}</strong></td>
+          <td>{{ product.min_wholesale_qty }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div>
+    <div class="inquiry-form">
+      <h2 style="color:var(--accent-dark);margin-bottom:1rem;">Bulk Order Inquiry</h2>
+      <p style="color:var(--muted);font-size:0.9rem;margin-bottom:1.5rem;">Fill the form and our team will contact you within 24 hours with a custom quote.</p>
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">{{ form.name.label_tag }}{{ form.name }}</div>
+        <div class="form-row">
+          <div class="form-group">{{ form.email.label_tag }}{{ form.email }}</div>
+          <div class="form-group">{{ form.phone.label_tag }}{{ form.phone }}</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">{{ form.company.label_tag }}{{ form.company }}</div>
+          <div class="form-group">{{ form.city.label_tag }}{{ form.city }}</div>
+        </div>
+        <div class="form-group">{{ form.product_interest.label_tag }}{{ form.product_interest }}</div>
+        <div class="form-group">{{ form.estimated_quantity.label_tag }}{{ form.estimated_quantity }}</div>
+        <div class="form-group">{{ form.message.label_tag }}{{ form.message }}</div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">Submit Wholesale Inquiry</button>
+      </form>
+    </div>
+
+    <div style="margin-top:1.5rem;padding:1.25rem;background:var(--accent-soft);border-radius:var(--radius);">
+      <p style="font-weight:600;color:var(--accent-dark);">Or shop wholesale directly:</p>
+      <p style="font-size:0.9rem;color:var(--muted);margin:0.5rem 0 1rem;">Switch to Wholesale mode in the header, add products to cart, and checkout with your business details.</p>
+      <form action="{% url 'shop:set_mode' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{% url 'shop:product_list' %}">
+        <button type="submit" name="mode" value="wholesale" class="btn btn-secondary">Enable Wholesale Mode</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

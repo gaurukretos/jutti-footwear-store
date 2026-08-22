@@ -1,0 +1,23 @@
+<article class="product-card">
+  <a href="{% url 'shop:product_detail' product.slug %}" class="product-image-wrap">
+    <img src="{{ product.display_image }}" alt="{{ product.name }}" class="product-image" loading="lazy">
+    <span class="product-overlay">View Details</span>
+  </a>
+  <div class="product-body">
+    <div class="product-meta">
+      <span class="product-style">{{ product.style.name }}</span>
+      <span class="product-gender">{{ product.gender.name }}</span>
+    </div>
+    <a href="{% url 'shop:product_detail' product.slug %}">
+      <h3 class="product-name">{{ product.name }}</h3>
+    </a>
+    <div class="product-badges">
+      {% if product.is_featured %}<span class="badge badge-featured">Featured</span>{% endif %}
+    </div>
+    <div class="product-prices">
+      <span class="price-retail">₹{{ product.retail_price }}</span>
+      <span class="price-wholesale">Bulk ₹{{ product.wholesale_price }}</span>
+    </div>
+    <a href="{% url 'shop:product_detail' product.slug %}" class="btn btn-sm btn-primary product-btn">Add to Cart</a>
+  </div>
+</article>

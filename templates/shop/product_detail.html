@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="container product-detail">
+  <div class="detail-image">
+    <img src="{{ product.display_image }}" alt="{{ product.name }}">
+  </div>
+  <div class="detail-info">
+    <div class="detail-meta">
+      <span class="badge badge-featured">{{ product.gender.name }}</span>
+      <span class="badge badge-wholesale">{{ product.style.name }}</span>
+      {% if product.is_featured %}<span class="badge badge-featured">Featured</span>{% endif %}
+    </div>
+    <h1>{{ product.name }}</h1>
+    <p style="color:var(--muted);">Origin: {{ product.style.origin }} · Stock: {{ product.stock }} pairs</p>
+    <p class="detail-description">{{ product.description }}</p>
+
+    <div class="price-box">
+      {% if shop_mode == 'wholesale' or cart_mode == 'wholesale' %}
+      <div class="main-price">₹{{ product.wholesale_price }} <span style="font-size:1rem;font-weight:400;color:var(--muted);">/ pair (wholesale)</span></div>
+      <p style="font-size:0.88rem;color:var(--muted);margin-top:0.25rem;">Retail price: ₹{{ product.retail_price }}</p>
+      <div class="wholesale-note">Minimum order: {{ product.min_wholesale_qty }} pairs for wholesale pricing</div>
+      {% else %}
+      <div class="main-price">₹{{ product.retail_price }}</div>
+      <p style="font-size:0.88rem;color:var(--muted);margin-top:0.25rem;">Wholesale: ₹{{ product.wholesale_price }}/pair (min {{ product.min_wholesale_qty }} pairs)</p>
+      {% endif %}
+    </div>
+
+    <form action="{% url 'shop:add_to_cart' %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="product_id" value="{{ product.id }}">
+      <input type="hidden" name="order_mode" value="{{ cart_mode|default:'retail' }}">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Size</label>
+          <select name="size" class="form-input">
+            {% for size in product.size_list %}
+            <option value="{{ size }}">Size {{ size }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Quantity</label>
+          <input type="number" name="quantity" class="form-input" value="{% if cart_mode == 'wholesale' %}{{ product.min_wholesale_qty }}{% else %}1{% endif %}" min="1">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%;margin-top:0.5rem;">
+        Add to Cart ({{ cart_mode|default:'retail'|title }})
+      </button>
+    </form>
+
+    <p style="margin-top:1rem;font-size:0.88rem;color:var(--muted);">
+      Need 50+ pairs? <a href="{% url 'shop:wholesale' %}" style="color:var(--accent-dark);font-weight:600;">Contact us for custom wholesale quote →</a>
+    </p>
+  </div>
+</div>
+
+{% if related_products %}
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Similar Products</h2>
+    </div>
+    <div class="product-grid">
+      {% for product in related_products %}
+      {% include "shop/partials/product_card.html" with product=product %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

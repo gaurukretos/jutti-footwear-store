@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart{% endblock %}
+
+{% block content %}
+<div class="container" style="padding:2rem 0;">
+  <h1 style="color:var(--accent-dark);margin-bottom:0.5rem;">Your Cart</h1>
+  <p style="color:var(--muted);margin-bottom:1.5rem;">
+    Mode: <strong>{{ cart_data.mode|title }}</strong>
+    {% if cart_data.mode == 'wholesale' %} — Bulk pricing applied{% endif %}
+  </p>
+
+  {% if cart_data.items %}
+  <table class="cart-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Size</th>
+        <th>Price</th>
+        <th>Qty</th>
+        <th>Total</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cart_data.items %}
+      <tr>
+        <td>
+          <a href="{% url 'shop:product_detail' item.product.slug %}" style="font-weight:600;">{{ item.product.name }}</a>
+        </td>
+        <td>{{ item.size|default:"-" }}</td>
+        <td>₹{{ item.unit_price }}</td>
+        <td>
+          <form action="{% url 'shop:update_cart' %}" method="post" style="display:flex;gap:0.25rem;align-items:center;">
+            {% csrf_token %}
+            <input type="hidden" name="key" value="{{ item.key }}">
+            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-input" style="width:70px;padding:0.3rem;">
+            <button type="submit" class="btn btn-sm btn-outline">Update</button>
+          </form>
+        </td>
+        <td><strong>₹{{ item.line_total }}</strong></td>
+        <td>
+          <form action="{% url 'shop:remove_from_cart' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="key" value="{{ item.key }}">
+            <button type="submit" class="btn btn-sm" style="background:#fee2e2;color:#991b1b;">Remove</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="cart-summary">
+    <div class="total">
+      <span>Subtotal</span>
+      <span>₹{{ cart_data.subtotal }}</span>
+    </div>
+    <a href="{% url 'shop:checkout' %}" class="btn btn-primary" style="width:100%;">Proceed to Checkout</a>
+    <a href="{% url 'shop:product_list' %}" class="btn btn-outline-dark" style="width:100%;margin-top:0.5rem;">Continue Shopping</a>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h3>Your cart is empty</h3>
+    <p>Browse our collection of juttis, mojaris and more.</p>
+    <a href="{% url 'shop:product_list' %}" class="btn btn-primary" style="margin-top:1rem;">Start Shopping</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

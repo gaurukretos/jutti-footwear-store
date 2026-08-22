@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Order Confirmed{% endblock %}
+
+{% block content %}
+<div class="container" style="padding:3rem 0;text-align:center;max-width:600px;">
+  <div style="font-size:4rem;margin-bottom:1rem;">✅</div>
+  <h1 style="color:var(--accent-dark);margin-bottom:0.5rem;">Order Placed Successfully!</h1>
+  <p style="color:var(--muted);margin-bottom:2rem;">Thank you, {{ order.customer_name }}. Your {{ order.order_type }} order #{{ order.id }} has been received.</p>
+
+  <div class="inquiry-form" style="text-align:left;">
+    <p><strong>Order ID:</strong> #{{ order.id }}</p>
+    <p><strong>Type:</strong> {{ order.get_order_type_display }}</p>
+    <p><strong>Total:</strong> ₹{{ order.total_amount }}</p>
+    <p><strong>Delivery to:</strong> {{ order.address }}, {{ order.city }}, {{ order.state }} - {{ order.pincode }}</p>
+    <hr style="margin:1rem 0;border:none;border-top:1px solid var(--border);">
+    <h3 style="margin-bottom:0.75rem;">Items</h3>
+    {% for item in order.items.all %}
+    <p>{{ item.product.name }} (Size {{ item.size }}) × {{ item.quantity }} = ₹{{ item.line_total }}</p>
+    {% endfor %}
+  </div>
+
+  <a href="{% url 'shop:product_list' %}" class="btn btn-primary" style="margin-top:2rem;">Continue Shopping</a>
+</div>
+{% endblock %}
